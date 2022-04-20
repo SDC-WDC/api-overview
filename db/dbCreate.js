@@ -82,15 +82,3 @@ const importData = async () => {
     console.log('❌ Uh oh, an error occurred:', err)
   }
 })();
-
-// setupDatabase()
-//   .then(() => {
-//     console.log('successfully setup database');
-//     return createTables();
-//   })
-//   .then(() => {
-//     console.log('successfully setup tables');
-//   })
-//   .catch(err => {
-//     console.log(err);
-//   })
