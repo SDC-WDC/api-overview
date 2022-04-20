@@ -1,6 +1,21 @@
 {
+  "name": "api-overview",
+  "version": "1.0.0",
+  "description": "API endpoint for the overview section of the SDC project",
+  "main": "server/index.js",
+  "repository": "https://github.com/SDC-WDC/api-overview.git",
+  "author": "Josh Andromidas <git@joshandromidas.com>",
+  "license": "UNLICENSED",
   "dependencies": {
     "express": "^4.17.3",
+    "pg": "^8.7.3",
+    "pgtools": "^0.3.2"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.15"
+  },
+  "scripts": {
+    "dev": "nodemon server/index.js",
+    "start": "node server/index.js"
   }
 }

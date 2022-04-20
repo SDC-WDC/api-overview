@@ -11,6 +11,7 @@ const Product = mongoose.model('Product', new Schema({
   default_price: String,
   created_at: String,
   updated_at: String,
+
   // Since there won't reasonably be more than a few features and styles ( always < 100 ),
   // we can safely nest documents without worrying about performance loss. We can keep it all
   // nested in one main PRODUCT document, allowing for much simpler read/write operations.
@@ -31,7 +32,7 @@ const Product = mongoose.model('Product', new Schema({
     name: String,
     original_price: String,
     sale_price: String,
-    "default?": Boolen,
+    "default?": Boolean,
     photos: [{
       thumbnail_url: String,
       url: String,
