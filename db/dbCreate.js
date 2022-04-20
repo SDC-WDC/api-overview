@@ -1,20 +1,17 @@
 // const pgtools = require('pgtools');
 const { Client } = require('pg');
+const fs = require('fs');
+const path = require('path');
 
 const DB_NAME = 'products_db';
-// const config = {
-//   user: 'joshandromidas',
-//   password: '',
-//   port: 5432,
-//   host: 'localhost'
-// }
 
 // Drop database if exists and create new one
 const setupDatabase = () => {
+  const conString = 'postgres://joshandromidas@localhost:5432/postgres';
+  const client = new Client(conString);
+
   return new Promise(async (resolve, reject) => {
     try {
-      const conString = 'postgres://joshandromidas@localhost:5432/postgres';
-      const client = new Client(conString);
       client.connect();
 
       await client.query(`DROP DATABASE IF EXISTS ${DB_NAME};`);
@@ -30,25 +27,37 @@ const setupDatabase = () => {
 }
 
 const createTables = async () => {
-  const createProductsTable = `
-    CREATE TABLE products(
-      id INT PRIMARY KEY  NOT NULL,
-      name           TEXT NOT NULL,
-      slogan         TEXT NOT NULL,
-      description    TEXT NOT NULL,
-      category       TEXT NOT NULL,
-      default_price  INT  NOT NULL
-    );
-  `;
+  const conString = `postgres://joshandromidas@localhost:5432/${DB_NAME}`;
+  const client = new Client(conString);
 
   return new Promise(async (resolve, reject) => {
     try {
-      const conString = `postgres://joshandromidas@localhost:5432/${DB_NAME}`;
-      const client = new Client(conString);
       client.connect();
 
-      const res = await client.query(createProductsTable);
-      console.log('🚀 ~ returnnewPromise ~ res', res)
+      const createTables = fs.readFileSync(path.resolve(__dirname, './create-tables.sql')).toString();
+      await client.query(createTables);
+
+      client.end();
+      resolve();
+    } catch (err) {
+      client.end();
+      reject(err);
+    }
+  });
+}
+
+const importData = async () => {
+  const conString = `postgres://joshandromidas@localhost:5432/${DB_NAME}`;
+  const client = new Client(conString);
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      client.connect();
+
+      const importData = fs.readFileSync(path.resolve(__dirname, './import-data.sql')).toString();
+      console.log('Importing data from CSV files...');
+      await client.query(importData);
+      console.log('Done!');
 
       client.end();
       resolve();
@@ -61,11 +70,14 @@ const createTables = async () => {
 
 // Run setup functions with IIFE
 (async () => {
+  console.log('Initializing database setup...');
   try {
     await setupDatabase();
-    console.log('✅ successfully setup database');
+    console.log('✅ successfully created database');
     await createTables();
-    console.log('✅ successfully setup tables');
+    console.log('✅ successfully created tables');
+    await importData();
+    console.log('✅ successfully imported data');
   } catch (err) {
     console.log('❌ Uh oh, an error occurred:', err)
   }
