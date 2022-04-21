@@ -35,7 +35,6 @@ const getProductInfo = async (req, res) => {
   const p_id = getAndValidateId(req.path, 2);
   if (p_id === -1) return res.send('Invalid product ID');
 
-
   try {
     const response = await db.query(`SELECT * FROM products WHERE id = ${p_id}`);
 
@@ -55,72 +54,10 @@ const getProductInfo = async (req, res) => {
   }
 }
 
-// const getStyles = async (req, res) => {
-//   // Extract product ID from URL path (as Number to prevent injections)
-//   const p_id = (req.path.split('/'))[2];
-
-//   // Check for non-number id
-//   if (isNaN(p_id)) {
-//     res.send('Invalid product ID');
-//     return;
-//   }
-
-//   const response = await db.query(`
-//     SELECT *
-//       FROM styles
-//       WHERE productid = ${p_id};
-//   `);
-//   console.log('🚀 ~ getStyles ~ response', response)
-//   res.json(response);
-// }
-
-// const data = {
-//   'SELECT * FROM styles WHERE productid = 1; unindexed': 72
-// }
-
 const getStyles = async (req, res) => {
   // Validate and extract product ID
   const p_id = getAndValidateId(req.path, 2);
   if (p_id === -1) return res.send('Invalid product ID');
-
-  const qwe = {
-    "product_id": "1",
-    "results": [
-      {
-        "style_id": 1,
-        "name": "Forest Green & Black",
-        "original_price": "140",
-        "sale_price": "0",
-        "default?": true,
-        "photos": [
-          {
-            "thumbnail_url": "urlplaceholder/style_1_photo_number_thumbnail.jpg",
-            "url": "urlplaceholder/style_1_photo_number.jpg"
-          },
-          {
-            "thumbnail_url": "urlplaceholder/style_1_photo_number_thumbnail.jpg",
-            "url": "urlplaceholder/style_1_photo_number.jpg"
-          }
-          // ...
-        ],
-        "skus": {
-          "37": {
-            "quantity": 8,
-            "size": "XS"
-          },
-          "38": {
-            "quantity": 16,
-            "size": "S"
-          },
-          "39": {
-            "quantity": 17,
-            "size": "M"
-          },
-          //...
-        }
-      },
-    ]
-  }
 
   const responseObj = {
     product_id: p_id.toString(),
@@ -168,16 +105,20 @@ const getStyles = async (req, res) => {
   }
 }
 
-
 const getRelated = async (req, res) => {
   const p_id = getAndValidateId(req.path, 2);
   if (p_id === -1) return res.send('Invalid product ID');
 
-  const response = await db.query(`
-    SELECT ARRAY(SELECT related_product_id
-      FROM related
-      WHERE current_product_id = ${p_id});
-  `);
+  try {
+    const response = await db.query(`
+      SELECT ARRAY(SELECT related_product_id
+        FROM related
+        WHERE current_product_id = ${p_id});
+    `);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Internal Server Error.');
+  }
 
   res.status(200).json(response.rows[0].array);
 }
