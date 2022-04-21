@@ -1,5 +1,14 @@
 const db = require('../db');
 
+// Helper function to extract and validate product ID
+const getAndValidateId = (path, split) => {
+  const p_id = (path.split('/'))[split];
+  if (isNaN(p_id)) {
+    return -1;
+  }
+  return p_id;
+}
+
 const getAllProducts = async (req, res) => {
   const { page = 1, count = 5 } = req.query;
   const maxCount = 100;
@@ -22,14 +31,10 @@ const getAllProducts = async (req, res) => {
 }
 
 const getProductInfo = async (req, res) => {
-  // Extract product ID from URL path (as Number to prevent injections)
-  const p_id = Number(req.path.split('/products/')[1]);
+  // Validate and extract product ID
+  const p_id = getAndValidateId(req.path, 2);
+  if (p_id === -1) return res.send('Invalid product ID');
 
-  // Check for non-number id
-  if (isNaN(p_id)) {
-    res.send('Invalid product ID');
-    return;
-  }
 
   try {
     const response = await db.query(`SELECT * FROM products WHERE id = ${p_id}`);
@@ -74,14 +79,9 @@ const getProductInfo = async (req, res) => {
 // }
 
 const getStyles = async (req, res) => {
-  // Extract product ID from URL path (as Number to prevent injections)
-  const p_id = (req.path.split('/'))[2];
-
-  // Check for non-number id
-  if (isNaN(p_id)) {
-    res.send('Invalid product ID');
-    return;
-  }
+  // Validate and extract product ID
+  const p_id = getAndValidateId(req.path, 2);
+  if (p_id === -1) return res.send('Invalid product ID');
 
   const qwe = {
     "product_id": "1",
@@ -168,32 +168,18 @@ const getStyles = async (req, res) => {
   }
 }
 
+
 const getRelated = async (req, res) => {
-  console.log(req.originalUrl);
-
-  // Extract product ID from URL path (as Number to prevent injections)
-  const p_id = (req.path.split('/'))[2];
-  console.log('🚀 ~ getRelated ~ p_id', p_id)
-
-  // Check for non-number id
-  if (isNaN(p_id)) {
-    res.send('Invalid product ID');
-    return;
-  }
+  const p_id = getAndValidateId(req.path, 2);
+  if (p_id === -1) return res.send('Invalid product ID');
 
   const response = await db.query(`
-    SELECT related_product_id
+    SELECT ARRAY(SELECT related_product_id
       FROM related
-      WHERE current_product_id = ${p_id};
+      WHERE current_product_id = ${p_id});
   `);
 
-  console.log('🚀 ~ getRelated ~ response', response)
-  const outputArr = response.rows.map(id => {
-    return id.related_product_id;
-  })
-  console.log('🚀 ~ getRelated ~ outputArr', outputArr)
-
-  res.status(200).json(outputArr);
+  res.status(200).json(response.rows[0].array);
 }
 
 module.exports = { getAllProducts, getProductInfo, getStyles, getRelated };
