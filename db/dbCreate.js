@@ -68,6 +68,28 @@ const importData = async () => {
   });
 }
 
+const indexData = async () => {
+  const conString = `postgres://joshandromidas@localhost:5432/${DB_NAME}`;
+  const client = new Client(conString);
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      client.connect();
+
+      const indexData = fs.readFileSync(path.resolve(__dirname, './index-data.sql')).toString();
+      console.log('Indexing data in tables...');
+      await client.query(indexData);
+      console.log('Done!');
+
+      client.end();
+      resolve();
+    } catch (err) {
+      client.end();
+      reject(err);
+    }
+  });
+}
+
 // Run setup functions with IIFE
 (async () => {
   console.log('Initializing database setup...');
@@ -78,6 +100,8 @@ const importData = async () => {
     console.log('✅ successfully created tables');
     await importData();
     console.log('✅ successfully imported data');
+    await indexData();
+    console.log('✅ successfully indexed data');
   } catch (err) {
     console.log('❌ Uh oh, an error occurred:', err)
   }
