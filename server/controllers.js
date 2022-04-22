@@ -115,12 +115,12 @@ const getRelated = async (req, res) => {
         FROM related
         WHERE current_product_id = ${p_id});
     `);
+    console.log(response.rows[0].array);
+    res.status(200).json(response.rows[0].array);
   } catch (err) {
     console.log(err);
     res.status(500).send('Internal Server Error.');
   }
-
-  res.status(200).json(response.rows[0].array);
 }
 
 module.exports = { getAllProducts, getProductInfo, getStyles, getRelated };

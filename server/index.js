@@ -1,5 +1,6 @@
 // require('dotenv').config();
 const express = require('express');
+require('dotenv').config()
 
 const { getAllProducts, getProductInfo, getStyles, getRelated } = require('./controllers.js');
 

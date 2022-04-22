@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - 5005:5005
+    environment:
+      - DB='products_db'
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: '987654321'
+      POSTGRES_DB: 'products_db'
+
+volumes:
+  db:

@@ -2,6 +2,7 @@
 const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const imports = require('./imports');
 
 const DB_NAME = 'products_db';
 
@@ -46,25 +47,33 @@ const createTables = async () => {
   });
 }
 
-const importData = async () => {
+const importData = () => {
   const conString = `postgres://joshandromidas@localhost:5432/${DB_NAME}`;
   const client = new Client(conString);
 
-  return new Promise(async (resolve, reject) => {
-    try {
-      client.connect();
+  return new Promise((resolve, reject) => {
+    client.connect();
+    const promises = [];
 
-      const importData = fs.readFileSync(path.resolve(__dirname, './import-data.sql')).toString();
-      console.log('Importing data from CSV files...');
-      await client.query(importData);
-      console.log('Done!');
+    console.log('Importing .csv files...');
 
-      client.end();
-      resolve();
-    } catch (err) {
-      client.end();
-      reject(err);
-    }
+    promises.push(client.query(imports.products))
+    promises.push(client.query(imports.styles))
+    promises.push(client.query(imports.features))
+    promises.push(client.query(imports.related))
+    promises.push(client.query(imports.skus))
+    promises.push(client.query(imports.photos))
+
+    Promise.all(promises)
+      .then(() => {
+        console.log('Done!');
+        client.end();
+        resolve();
+      })
+      .catch((err) => {
+        client.end();
+        reject(err);
+      })
   });
 }
 
