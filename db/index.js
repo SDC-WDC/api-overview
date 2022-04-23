@@ -1,4 +1,11 @@
-const { Pool } = require('pg');
+// const { Pool } = require('pg');
+import pg from 'pg';
+import dotenv from 'dotenv';
+const { Pool } = pg;
+dotenv.config();
+
+console.log('loading up db index');
+console.log('process.env.DB', process.env.DB);
 
 const credentials = {
   host: process.env.HOST,
@@ -9,8 +16,10 @@ const credentials = {
 
 const pool = new Pool(credentials);
 
-module.exports = {
+const db = {
   query: (text, params, callback) => {
     return pool.query(text, params, callback)
   },
 }
+
+export { db }

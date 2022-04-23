@@ -1,9 +1,10 @@
 // require('dotenv').config();
-const express = require('express');
-require('dotenv').config()
+import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 // const dbCreate = require('../db/dbCreate');
 
-const { getAllProducts, getProductInfo, getStyles, getRelated } = require('./controllers.js');
+import { getAllProducts, getProductInfo, getStyles, getRelated } from './controllers.js';
 
 const app = express();
 app.use(express.json());

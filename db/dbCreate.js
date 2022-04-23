@@ -13,7 +13,7 @@ const credentials = {
 };
 
 // Drop database if exists and create new one
-const setupDatabase = () => {
+const resetDatabase = () => {
   const client = new Client({ ...credentials, database: 'postgres' });
 
   return new Promise(async (resolve, reject) => {
@@ -105,25 +105,35 @@ const indexData = async () => {
 (async () => {
   console.log('Initializing database setup...');
   try {
-    await setupDatabase();
-    console.log('✅ successfully created database');
+    // await resetDatabase();
+    // console.log('✅ successfully created database');
     await createTables();
     console.log('✅ successfully created tables');
-    await importData();
-    console.log('✅ successfully imported data');
-    await indexData();
-    console.log('✅ successfully indexed data');
+    // await importData();
+    // console.log('✅ successfully imported data');
+    // await indexData();
+    // console.log('✅ successfully indexed data');
   } catch (err) {
     console.log('❌ Uh oh, an error occurred:', err)
   }
 })();
 
 
+module.exports = {
+  startImport: async () => {
+    await importData();
+    console.log('✅ successfully imported data');
+    await indexData();
+    console.log('✅ successfully indexed data');
+  }
+}
+
+
 // module.exports = {
 //   run: async () => {
 //     console.log('Initializing database setup...');
 //     try {
-//       await setupDatabase();
+//       await resetDatabase();
 //       console.log('✅ successfully created database');
 //       await createTables();
 //       console.log('✅ successfully created tables');

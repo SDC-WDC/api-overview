@@ -1,8 +1,8 @@
-version: '3.9'
+version: '3.3'
 
 services:
   server:
-    build: .
+    image: joshandromidas/api-overview
     ports:
       - '5005:5005'
     environment:

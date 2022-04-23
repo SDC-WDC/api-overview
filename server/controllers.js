@@ -1,4 +1,4 @@
-const db = require('../db');
+import { db } from '../db/index.js';
 
 // Helper function to extract and validate product ID
 const getAndValidateId = (path, split) => {
@@ -123,4 +123,4 @@ const getRelated = async (req, res) => {
   }
 }
 
-module.exports = { getAllProducts, getProductInfo, getStyles, getRelated };
+export { getAllProducts, getProductInfo, getStyles, getRelated };

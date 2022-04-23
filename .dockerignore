@@ -1,3 +1,6 @@
 node_modules
 research
 .dockerignore
+.git
+source_files
+docker-compose.yml
