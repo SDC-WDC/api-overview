@@ -1,21 +1,28 @@
-version: '3.8'
+version: '3.9'
 
 services:
   server:
-    build:
-      context: .
+    build: .
     ports:
-      - 5005:5005
+      - '5005:5005'
     environment:
-      - DB='products_db'
-
+      - HOST=db
+      - USER=docker
+      - PASS=asdf1234
+      - DB=products_db
+      - PORT=5005
+    volumes:
+      - source_files:/app/source_files
   db:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: '987654321'
-      POSTGRES_DB: 'products_db'
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: asdf1234
+    volumes:
+      - data:/var/lib/postgresql/data
+      - source_files:/app/source_files
 
 volumes:
-  db:
+  data:
+  source_files:

@@ -1,6 +1,7 @@
 // require('dotenv').config();
 const express = require('express');
 require('dotenv').config()
+// const dbCreate = require('../db/dbCreate');
 
 const { getAllProducts, getProductInfo, getStyles, getRelated } = require('./controllers.js');
 
@@ -16,6 +17,12 @@ app.get('/products/*', getProductInfo);
 
 app.get('/products', getAllProducts);
 
-app.listen(3504, () => {
-  console.log('Listening on port 3504');
+app.get('/', (req, res) => {
+  res.send('this is the api project');
+});
+
+// dbCreate.run();
+
+app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${process.env.PORT}`);
 });

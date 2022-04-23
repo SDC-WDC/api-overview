@@ -6,10 +6,8 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY ["package.json", "yarn.lock", "./"]
+COPY . .
 
 RUN yarn install
 
-COPY . .
-
-CMD [ "node", "server.js" ]
+CMD [ "node", "server/index.js" ]
