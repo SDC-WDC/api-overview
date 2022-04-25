@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  server:
+    build: .
+    ports:
+      - '5005:5005'
+    environment:
+      - HOST=db
+      - USER=docker
+      - PASS=asdf1234
+      - DB=products_db
+    volumes:
+      - db:/app/db
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: asdf1234
+      POSTGRES_DB: products_db
+    volumes:
+      - data:/var/lib/postgresql/data
+      - db:/app/db
+
+volumes:
+  data:
+  db:
