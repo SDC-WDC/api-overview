@@ -4,3 +4,4 @@ research
 .git
 source_files
 docker-compose.yml
+*/dbexport.pgsql

@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.3'
 
 services:
   server:
@@ -10,7 +10,6 @@ services:
       - USER=docker
       - PASS=asdf1234
       - DB=products_db
-      - PORT=5005
     volumes:
       - db:/app/db
   db:

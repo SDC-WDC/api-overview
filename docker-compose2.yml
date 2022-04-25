@@ -10,7 +10,6 @@ services:
       - USER=docker
       - PASS=asdf1234
       - DB=products_db
-      - PORT=5005
     volumes:
       - db:/app/db
   db:

@@ -42,13 +42,14 @@ const downloadDB = async () => {
   try {
     await downloadDB();
     console.log('Finished download!');
-    console.log('Importing database, please wait...');
-    await execute(`psql -U ${process.env.USER} ${process.env.DB} < ${file}`)
-    console.log('Finished import!');
-    console.log('Deleting backup file...');
-    fs.unlinkSync(file);
-    console.log('Done! The database is now ready to use.');
+    // console.log('Importing database, please wait...');
+    // await execute(`docker exec -i sdc-api-overview-db /bin/bash -c "psql -U ${process.env.USER} ${process.env.DB}" < ${file}`);
+    // console.log('Finished import!');
+    // console.log('Deleting backup file...');
+    // fs.unlinkSync(file);
+    // console.log('Done! The database is now ready to use.');
   } catch (err) {
     console.log('❌', err);
   }
 })();
+// `docker exec -i sdc-api-overview-db /bin/bash -c "psql -U docker products_db" < /app/db/dbexport.pgsql`

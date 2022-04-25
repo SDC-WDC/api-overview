@@ -10,4 +10,6 @@ COPY . .
 
 RUN yarn install
 
+RUN yarn db-import
+
 CMD [ "node", "server/index.js" ]

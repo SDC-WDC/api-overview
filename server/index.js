@@ -24,6 +24,6 @@ app.get('/', (req, res) => {
 
 // dbCreate.run();
 
-app.listen(process.env.PORT, () => {
-  console.log(`Listening on port ${process.env.PORT}`);
+app.listen(5005, () => {
+  console.log(`Listening on port 5005`);
 });
