@@ -1,7 +1,6 @@
-node_modules
+**/node_modules
 research
 .dockerignore
 .git
-source_files
+**/source_files
 docker-compose.yml
-*/dbexport.pgsql

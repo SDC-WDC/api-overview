@@ -6,10 +6,14 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY . .
+COPY dbexport.pgsql .
+
+COPY db/ db/
+
+COPY server/ server/
+
+COPY ["package.json", "yarn.lock", "./"]
 
 RUN yarn install
-
-RUN yarn db-import
 
 CMD [ "node", "server/index.js" ]

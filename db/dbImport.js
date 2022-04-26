@@ -52,4 +52,4 @@ const downloadDB = async () => {
     console.log('❌', err);
   }
 })();
-// `docker exec -i sdc-api-overview-db /bin/bash -c "psql -U docker products_db" < /app/db/dbexport.pgsql`
+// `docker exec -i sdc-api-overview-db /bin/bash -c "psql -U docker products_db < dbexport.pgsql"`

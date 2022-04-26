@@ -2,27 +2,27 @@ version: '3.3'
 
 services:
   server:
-    image: joshandromidas/api-overview
+    build: .
     ports:
       - '5005:5005'
     environment:
-      - HOST=db
+      - HOST=pg-database
       - USER=docker
-      - PASS=asdf1234
+      - PASS=your_password_here
       - DB=products_db
     volumes:
-      - db:/app/db
-  db:
+      - server:/app
+  pg-database:
     image: postgres
+    container_name: pg-database
     restart: always
     environment:
       POSTGRES_USER: docker
-      POSTGRES_PASSWORD: asdf1234
+      POSTGRES_PASSWORD: your_password_here
       POSTGRES_DB: products_db
     volumes:
-      - data:/var/lib/postgresql/data
-      - db:/app/db
+      - server:/app/server
 
 volumes:
   data:
-  db:
+  server:
